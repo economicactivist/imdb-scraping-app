@@ -17,21 +17,60 @@ def main():
 
     #* select() finds all occurences of a certain tag and returns a list 
     movie_rows = soup.select('tbody tr')
-    #print(len(movie_rows))
-    for movie_row in movie_rows:
+    num_movies = len(movie_rows)
+ 
+
+
         #<class 'bs4.element.Tag'>  (each element is a class object, not a string)
         #print(type(movie_row))
         #* select_one() finds the first occurence of a certain tag and returns a **tag object**
         # title_column = movie_row.select_one('td.titleColumn')
-        title = movie_row.select_one('td.titleColumn a').get_text()
-        print(title)
-        year = movie_row.select_one('td.titleColumn span.secondaryInfo').get_text()
-        print(year)
-        rating = movie_row.select_one('td.ratingColumn strong').get_text()
-        print(rating)
-        actor = movie_row.select_one('td.titleColumn a').attrs['title']
-        actor_list = actor.split(',')[1:]
-        print(actor_list)
+    title = [movie_row.select_one('td.titleColumn a').get_text() for movie_row in movie_rows]
+    
+    year = [movie_row.select_one('td.titleColumn span.secondaryInfo').get_text() for movie_row in movie_rows]
+    
+    rating = [float(movie_row.select_one('td.ratingColumn strong').get_text()) for movie_row in movie_rows]
+    
+    actors_and_director = [movie_row.select_one('td.titleColumn a').attrs['title'] for movie_row in movie_rows]
+    
+    director = [director_item.split(',')[0] for director_item in actors_and_director]
+    
+    actors = [actor_item.split(',')[1:] for actor_item in actors_and_director]
+#     return num_movies, title, year, rating, director, actors
+        
+
+# num_movies, title, year, rating, director, actors = main()
+
+    # print(num_movies[0])
+    # print(title[0])
+    # print(year[0])
+    # print(rating[0])
+    # print(director[0])
+    # print(actors[0])
+    while True:
+        prevent_infinite = 0
+        rand_movie_idx = random.randrange(0, num_movies, 1)
+        rand_movie = f'''                         
+                        {title[rand_movie_idx]} {year[rand_movie_idx]},
+                        rating: {rating[rand_movie_idx]}, 
+                        director: {director[rand_movie_idx]}, 
+                        actors: {actors[rand_movie_idx]}'''
+        print(rand_movie)
+        print('\n')
+        user_input = input('Would you like to see another movie? (y/[n]) ').casefold()
+        if user_input != 'y':
+            break
+        prevent_infinite += 1
+        if prevent_infinite > 1000:
+            print("infinite loop detected. exiting...")
+            break
+
+
+    #* random.randrange(start, stop, step)
+
+
+
+
         # print(title_column.attrs.get('class'))  #* same as print(title_column['class'])
         # rating_column = movie_row.select_one('td.ratingColumn')
         # print(rating_column.text)
