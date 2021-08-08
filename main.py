@@ -22,11 +22,21 @@ def main():
         #<class 'bs4.element.Tag'>  (each element is a class object, not a string)
         #print(type(movie_row))
         #* select_one() finds the first occurence of a certain tag and returns a **tag object**
-        title_column = movie_row.select_one('td.titleColumn')
-        print(title_column.attrs.get('class'))  #* same as print(title_column['class'])
+        # title_column = movie_row.select_one('td.titleColumn')
+        title = movie_row.select_one('td.titleColumn a').get_text()
+        print(title)
+        year = movie_row.select_one('td.titleColumn span.secondaryInfo').get_text()
+        print(year)
+        rating = movie_row.select_one('td.ratingColumn strong').get_text()
+        print(rating)
+        actor = movie_row.select_one('td.titleColumn a').attrs['title']
+        actor_list = actor.split(',')[1:]
+        print(actor_list)
+        # print(title_column.attrs.get('class'))  #* same as print(title_column['class'])
         # rating_column = movie_row.select_one('td.ratingColumn')
         # print(rating_column.text)
-        # print(movie_row.text)
+        # print(movie_row.text) #* contatins scattered text of all info (ratings, title, actors, year)
+        
         # print(movie_row.attrs)
         # print(movie_row.attrs['class'])
         # print(movie_row.attrs['class'][0])
